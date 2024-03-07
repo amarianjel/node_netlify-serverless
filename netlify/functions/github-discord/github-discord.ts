@@ -18,61 +18,62 @@ const notify = async ( message: string ) => {  //* Este es el metodo que interes
   return true;
 };
 
-// const onStar = ( payload: any ): string => {
+// Logica
+const onStar = ( payload: any ): string => {
 
-//   const { action, sender, repository } = payload;
+  const { action, sender, repository } = payload;
 
-//   return `User ${ sender.login } ${ action } star on ${ repository.full_name }`;
-// }
+  return `User ${ sender.login } ${ action } star on ${ repository.full_name }`;
+}
 
-// const onIssue = ( payload: any ): string => {
+const onIssue = ( payload: any ): string => {
 
-//   const { action, issue } = payload;
+  const { action, issue } = payload;
 
-//   if ( action === 'opened' ) {
-//     return `An issue was opened with this title ${ issue.title }`;
-//   }
+  if ( action === 'opened' ) {
+    return `An issue was opened with this title ${ issue.title }`;
+  }
 
-//   if ( action === 'closed' ) {
-//     return `An issue was closed by ${ issue.user.login }`;
-//   }
+  if ( action === 'closed' ) {
+    return `An issue was closed by ${ issue.user.login }`;
+  }
 
-//   if ( action === 'reopened' ) {
-//     return `An issue was reopened by ${ issue.user.login }`;
-//   }
+  if ( action === 'reopened' ) {
+    return `An issue was reopened by ${ issue.user.login }`;
+  }
 
 
-//   return `Unhandled action for the issue event ${ action }`;
-// }
+  return `Unhandled action for the issue event ${ action }`;
+}
 
 
 
 const handler: Handler = async ( event: HandlerEvent, context: HandlerContext ) => {
 
-  // const githubEvent = event.headers[ 'x-github-event'] ?? 'unknown';
-  // const payload = JSON.parse( event.body ?? '{}' );
-  // let message: string;
+  //Logica
+  const githubEvent = event.headers[ 'x-github-event'] ?? 'unknown';
+  const payload = JSON.parse( event.body ?? '{}' );
+  let message: string;
 
-  // console.log(payload);
+  console.log(payload);
 
-  // switch( githubEvent ) {
+  switch( githubEvent ) {
 
-  //   case 'star':
-  //     message = onStar( payload );
-  //   break;
+    case 'star':
+      message = onStar( payload );
+    break;
 
-  //   case 'issues':
-  //     message = onIssue(payload);
-  //   break;
-
-
-  //   default:
-  //     message = `Unknown event ${ githubEvent }`
-  // }
+    case 'issues':
+      message = onIssue(payload);
+    break;
 
 
-  // await notify( message );
-  await notify( "Hola mundo desde Netlify dev" );
+    default:
+      message = `Unknown event ${ githubEvent }`
+  }
+
+
+  await notify( message );
 
   return {
     statusCode: 200,
